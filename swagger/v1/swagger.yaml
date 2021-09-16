@@ -1,0 +1,101 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+paths:
+  "/todos":
+    post:
+      summary: Creates a Todolist
+      tags:
+        - Todos
+      parameters: [ ]
+      responses:
+        '201':
+          created_by: todolist created
+        '422':
+          created_by: invalid request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                created_by:
+                  type: string
+              required:
+                - title
+                - created_by
+          application/xml:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                created_by:
+                  type: string
+              required:
+                - title
+                - created_by
+  "/todos/{id}":
+    get:
+      summary: Retrieves a Task
+      tags:
+        - Task
+      parameters:
+        - title: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          created_by: title found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  description:
+                    type: string
+                required:
+                  - id
+                  - title
+                  - created_by
+            application/xml:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  description:
+                    type: string
+                required:
+                  - id
+                  - title
+                  - created_by
+        '404':
+          description: todolist not found
+        '406':
+          description: unsupported accept header
+  components:
+    responses:
+      UnauthorizedError:
+        description: Access token is missing or invalid
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
